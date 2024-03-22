@@ -1,0 +1,5 @@
+-sname film_booking
+-mnesia dir "db"
+-setcookie film_booking
++K true
++A30
