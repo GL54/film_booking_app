@@ -1,7 +1,8 @@
 -module(movie_reminder).
-
 -include("tables.hrl").
 -define(PREVIOUS_TIME,62167219200).
+-define(STANDARD_TIME,(5*60*60)+(30*60)).
+
 -export([set_reminder/5,maintain_notification/0,convert_to_system_time/2]).
 
 set_reminder(Email,Name,Movie_name,Booking_id,{Time,Date})->
@@ -26,8 +27,8 @@ maintain_notification()->
                     case Time+(15*60) >= erlang:system_time(second) of 
                       true->
                         io:format("true"),
-                        mail_service:send_reminder(Email,{Name,Movie_name}),
-                        mnesia:dirty_delete(reminders,Id);
+                        mail_service:send_reminder(Email,{Name,Movie_name});
+                        % mnesia:dirty_delete(reminders,Id);
                       false->
                         % mnesia:dirty_delete(reminders,Id)
                         ok
@@ -41,15 +42,16 @@ maintain_notification()->
 check_reminders()->
   Current_time = erlang:system_time(second),
   Data = #reminders{time='$1', _ = '_'},
-  Guard = [{'=<','$1',Current_time}],
-  Reminders=mnesia:dirty_select(reminders, [{Data, Guard, ['$_']}]).
+  Guard = [{'=<','$1',Current_time+?STANDARD_TIME}],
+  Reminders=mnesia:dirty_select(reminders, [{Data, Guard, ['$_']}]),
+  Reminders.
 
 % to convert to system time
 convert_to_system_time(DateStr, TimeStr) ->
     {Date, Time} = parse_date_time(DateStr, TimeStr),
     io:format("-----date= ~p time=~p~n",[Date,Time]),
-    Current_time=calendar:datetime_to_gregorian_seconds({Date,Time}),
-    Current_time -?PREVIOUS_TIME.
+    Time_seconds=calendar:datetime_to_gregorian_seconds({Date,Time}),
+    Time_seconds -?PREVIOUS_TIME.
 
 parse_date_time(DateStr, TimeStr) ->
     [Year, Month, Day] = string:tokens(binary_to_list(DateStr), "-"),

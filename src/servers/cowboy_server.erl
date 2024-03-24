@@ -43,9 +43,14 @@ start_cowboy()->
                                            {"/v1/login",user_login, []},
                                           %  client apis
                                            {"/v1/client/signup",client_signup, []},
+                                           {"/v1/client/films",client_get_films, []},
+                                           {"/v1/client/films/book",book_film, []},
+                                           {"/v1/client/get/bookings",client_bookings, []},
+                                           {"/v1/client/films/cancel",cancel_film, []},
                                           %  admin apis
                                          {"/v1/admin/film",film_handeling, []} ,
-                                         {"/v1/admin/booking/details",get_booking_details, []} 
+                                         {"/v1/admin/booking/details",get_booking_details, []}
+                                        %  {"/v1/admin/booking/bookings.csv",cowboy_static, {priv_file, film_booking, "bookings.csv"}} 
 
                                          ]}
                                    ]),

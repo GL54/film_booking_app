@@ -12,7 +12,7 @@ book_film(Film_id,{Name,Email,Tickets_count}) ->
       Total_seats=Data#films.total_seats,
       Seats_data=Data#films.seats_data,
       Film_time=Data#films.time,
-      case Total_seats > Tickets_count of 
+      case Total_seats >= Tickets_count of 
         true->
           {Total_price,Booking_data}=book_tickets(Film_id,Tickets_count,Seats_data),
           complete_booking({Film_id,Name,Email,Tickets_count,Total_price,Booking_data,Film_time});
@@ -27,6 +27,8 @@ book_tickets(Id,Tickets_count,Seat_data) ->
                     <<"available_seat_count">> := Seats}
                   ,{Tickets,Total_price,Total_data}) ->
                   if 
+                    Seats =:= 0 ->
+                      {Tickets,Total_price,Total_data};
                     Tickets =:= 0 ->
                       {Tickets,Total_price,Total_data};
                     Seats>=Tickets ->

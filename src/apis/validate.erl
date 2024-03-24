@@ -6,7 +6,6 @@
 
 is_admin(Id)->
   User = mnesia:dirty_read(users,Id),
-  io:format("----- the user is ~p",[User]),
   case User of 
     [] ->
       not_a_user;

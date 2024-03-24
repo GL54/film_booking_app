@@ -5,7 +5,7 @@
         update_seat_data/0,to_csv/0]).
 % client
 -export([signup/0,get_all_film/0,get_one_film/0,get_film_by_date/0,
-          all_bookings/0,book_film/0,cancel_film/0,
+          all_bookings/0,book_film/0,cancel_film/0,all_reminders/0,
           test_confirmation/0,test_cancelation/0,test_reminder/0 ,test_set_reminder/0,admin_signup/0]).
 
 signup()->
@@ -31,7 +31,7 @@ get_one_film()->
     get_films:single_film(10001).
 
 get_film_by_date()->
-    Date= <<"2024-2-29">>,
+    Date= <<"2024-3-21">>,
     get_films:by_date(Date).
 
 update_one_field()->
@@ -51,7 +51,7 @@ all_bookings()->
 
 to_csv()->
   Data = all_bookings(),
-  export_to_csv:write_bookings_to_csv("2024-3-22",Data,"./data.csv").
+  export_to_csv:write_bookings_to_csv("2024-3-22",Data,"./bookings.csv").
 
 test_confirmation()->
   mail_service:send_confirmation(<<"jchikku96@gmail.com">>,{<<"Jithu">>,<<"You lie in april">>,<<"2024-3-20">>,350}).
@@ -65,3 +65,7 @@ test_reminder()->
 
 test_set_reminder()->
   movie_reminder:set_reminder(<<"jchikku96@gmail.com">>,<<"Jithu">>,<<"Ozler">>,{<<"23:59">>,<<"2024-3-21">>}).
+
+all_reminders()->
+  Data = #reminders{ _ = '_'},
+  mnesia:dirty_select(reminders, [{Data, [], ['$_']}]).
