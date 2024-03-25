@@ -1,7 +1,8 @@
-
+% for a table to maintain id's of the some tables
 -record(sequence,{name, 
                   value}).
 
+% to maintain user information
 -record(users,{uuid=0,
                name,
                email,
@@ -11,7 +12,7 @@
                phone,
                user_name}).
 
-
+% to maintain films information
 -record(films,{film_uuid,
                name,
                time,
@@ -22,6 +23,7 @@
                date
                }).
 
+% to maintain booking information
 -record(bookings,{id,
                  film_uuid,
                  client_name,
@@ -31,6 +33,7 @@
                  total_tickets
                  }).
 
+% to maintain reminders information
 -record(reminders,{id,
                   booking_id,
                   email,

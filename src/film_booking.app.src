@@ -1,19 +1,19 @@
 {application, film_booking,
- [{description, "An OTP application"},
+  [{description, "An OTP application"},
   {vsn, "0.1.0"},
   {registered, []},
   {mod, {film_booking_app, []}},
   {applications,
-   [kernel,
+    [kernel,
     stdlib,
     cowboy,
     jiffy,
     mnesia,
     gen_smtp
-   ]},
+    ]},
   {env,[]},
   {modules, []},
 
   {licenses, ["Apache-2.0"]},
   {links, []}
- ]}.
+  ]}.

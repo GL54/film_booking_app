@@ -1,6 +1,6 @@
 -module(user_login).
-
 -behaviour(cowboy_handler).
+
 % The Apis
 -export([init/2]).
 
@@ -14,7 +14,7 @@ init(#{method := <<"POST">>} = Req, State) ->
           error:_Error->
             <<"invalid inputs">>
         end,
-  Response = #{<<"uid">> =>Reply },
+  Response = #{<<"Response">> =>Reply },
   ResponseBody = jiffy:encode(Response),
   Req2 = cowboy_req:reply(200, #{<<"content-type">> => <<"application/json">>}, 
                           ResponseBody, Req),

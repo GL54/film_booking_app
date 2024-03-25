@@ -9,14 +9,14 @@ init(#{method := <<"POST">>} = Req, State) ->
   Headers=maps:get(headers,Req),
   Check=maps:is_key(<<"uid">>,Headers) ,
   Reply =case Check of
-          true ->
-            {ok, Body, _} = cowboy_req:read_body(Req),
-            #{<<"uid">> := Uid}= cowboy_req:headers(Req),
-            Data=jiffy:decode(Body,[return_maps]),
-            handle_add_film(Data,Uid);
-          false ->
-            <<"Invalid Header">>
-        end,
+           true ->
+             {ok, Body, _} = cowboy_req:read_body(Req),
+             #{<<"uid">> := Uid}= cowboy_req:headers(Req),
+             Data=jiffy:decode(Body,[return_maps]),
+             handle_add_film(Data,Uid);
+           false ->
+             <<"Invalid Header">>
+         end,
   Response = #{<<"data">> =>Reply },
   ResponseBody = jiffy:encode(Response),
   Req2 = cowboy_req:reply(200, #{<<"content-type">> => <<"application/json">>}, 
@@ -28,14 +28,14 @@ init(#{method := <<"PUT">>} = Req, State) ->
   Headers=maps:get(headers,Req),
   Check=maps:is_key(<<"uid">>,Headers) ,
   Reply =case Check of
-          true ->
-            {ok, Body, _} = cowboy_req:read_body(Req),
-            #{<<"uid">> := Uid}= cowboy_req:headers(Req),
-            Data=jiffy:decode(Body,[return_maps]),
-            handle_update_film(Data,Uid);
-          false ->
-            <<"Invalid Header">>
-        end,
+           true ->
+             {ok, Body, _} = cowboy_req:read_body(Req),
+             #{<<"uid">> := Uid}= cowboy_req:headers(Req),
+             Data=jiffy:decode(Body,[return_maps]),
+             handle_update_film(Data,Uid);
+           false ->
+             <<"Invalid Header">>
+         end,
   Response = #{<<"data">> =>Reply },
   ResponseBody = jiffy:encode(Response),
   Req2 = cowboy_req:reply(200, #{<<"content-type">> => <<"application/json">>}, 
@@ -75,6 +75,6 @@ handle_update_film(Data,Uid)->
           update_film:datas({Film_id,Field,Value})
       end;
     false ->
-        <<"not a admin">>
+      <<"not a admin">>
   end.
- 
+

@@ -10,20 +10,19 @@ init(#{method := <<"POST">>} = Req, State) ->
   Headers=maps:get(headers,Req),
   Check=maps:is_key(<<"uid">>,Headers) ,
   Reply =case Check of
-          true ->
-            {ok, Body, _} = cowboy_req:read_body(Req),
-            #{<<"uid">> := Uid}= cowboy_req:headers(Req),
-            Data=jiffy:decode(Body,[return_maps]),
-            book_film(Data,Uid);
-          false ->
-            <<"Invalid Header">>
-        end,
+           true ->
+             {ok, Body, _} = cowboy_req:read_body(Req),
+             #{<<"uid">> := Uid}= cowboy_req:headers(Req),
+             Data=jiffy:decode(Body,[return_maps]),
+             book_film(Data,Uid);
+           false ->
+             <<"Invalid Header">>
+         end,
   Response = #{<<"data">> =>Reply },
   ResponseBody = jiffy:encode(Response),
   Req2 = cowboy_req:reply(200, #{<<"content-type">> => <<"application/json">>}, 
                           ResponseBody, Req),
   {ok, Req2, State}.
-
 
 %helper functions 
 book_film(Data,Uid)->
@@ -37,4 +36,4 @@ book_film(Data,Uid)->
       Name=User#users.name,
       Email = User#users.email,
       client_booking:book_film(Film_id,{Name,Email,Seats_count})
-    end.
+  end.

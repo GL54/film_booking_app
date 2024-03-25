@@ -9,15 +9,15 @@ init(#{method := <<"GET">>} = Req, State) ->
   Headers=maps:get(headers,Req),
   Check=maps:is_key(<<"uid">>,Headers) ,
   Reply =case Check of
-          true ->
-            #{<<"uid">> := Uid}= cowboy_req:headers(Req),
-            {{Year,Month,Day},{_,_,_}}=calendar:local_time(),
-            Date=integer_to_list(Year)++"-"++integer_to_list(Month)++"-"++ integer_to_list(Day),
-            Map = #{<<"date">> => list_to_binary(Date)},
-            get_films(Map,Uid);
-          false ->
-            <<"Invalid Header">>
-        end,
+           true ->
+             #{<<"uid">> := Uid}= cowboy_req:headers(Req),
+             {{Year,Month,Day},{_,_,_}}=calendar:local_time(),
+             Date=integer_to_list(Year)++"-"++integer_to_list(Month)++"-"++ integer_to_list(Day),
+             Map = #{<<"date">> => list_to_binary(Date)},
+             get_films(Map,Uid);
+           false ->
+             <<"Invalid Header">>
+         end,
   Response = #{<<"data">> =>Reply },
   ResponseBody = jiffy:encode(Response),
   Req2 = cowboy_req:reply(200, #{<<"content-type">> => <<"application/json">>}, 
@@ -29,14 +29,14 @@ init(#{method := <<"POST">>} = Req, State) ->
   Headers=maps:get(headers,Req),
   Check=maps:is_key(<<"uid">>,Headers) ,
   Reply =case Check of
-          true ->
-            {ok, Body, _} = cowboy_req:read_body(Req),
-            #{<<"uid">> := Uid}= cowboy_req:headers(Req),
-            Data=jiffy:decode(Body,[return_maps]),
-            get_films(Data,Uid);
-          false ->
-            <<"Invalid Header">>
-        end,
+           true ->
+             {ok, Body, _} = cowboy_req:read_body(Req),
+             #{<<"uid">> := Uid}= cowboy_req:headers(Req),
+             Data=jiffy:decode(Body,[return_maps]),
+             get_films(Data,Uid);
+           false ->
+             <<"Invalid Header">>
+         end,
   Response = #{<<"data">> =>Reply },
   ResponseBody = jiffy:encode(Response),
   Req2 = cowboy_req:reply(200, #{<<"content-type">> => <<"application/json">>}, 
@@ -53,7 +53,7 @@ get_films(Data,Uid)->
       Date = maps:get(<<"date">>,Data),
       Response = get_films:by_date(Date),
       list_to_map(Response)
-    end.
+  end.
 
 % Function to transform each tuple into a map
 tuple_to_map({films,Id,Name,Time,_,Seats_data,Seats_count,Theater_name,Date}) ->

@@ -12,7 +12,7 @@ is_admin(Id)->
     [Data]->
       Data#users.role =:= maps:get(admin,?ROLE)
   end.
-    
+
 is_client(Id)->
   User = mnesia:dirty_read(users,Id),
   case User of 

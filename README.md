@@ -25,5 +25,5 @@ Client
 POST :/v1/client/signup   => to register the user {completed}
 POST :/v1/client/films    => to get all films on a particular date {completed}
 POST :/v1/client/booking  => to book a particular film {completed}
-POST :/v1/client/cancel   => to cancel the a film booking
+POST :/v1/client/cancel   => to cancel the a film booking {completed}
 

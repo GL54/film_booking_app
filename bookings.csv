@@ -1,1 +1,6 @@
 "Date","Booking ID","User ID","Name","Email","Category","Price","Ticket Count","Total Price","Total Tickets"
+"2024-3-25",10001,10001,"Jithu","jithukrishnangl5@gmail.com","platinum, 150, 2",300,2
+"2024-3-25",10004,10003,"Jithu","jithukrishnangl5@gmail.com","platinum, 150, 0",0,0
+"2024-3-25",10003,10002,"Jithu","jithukrishnangl5@gmail.com","silver, 200, 13",6650,40
+"2024-3-25",10003,10002,"Jithu","jithukrishnangl5@gmail.com","platinum, 150, 27",6650,40
+"2024-3-25",10002,10002,"Jithu","jithukrishnangl5@gmail.com","platinum, 150, 2",300,2
