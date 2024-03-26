@@ -19,7 +19,7 @@ book_film(Film_id,{Name,Email,Tickets_count}) ->
           {Total_price,Booking_data}=book_tickets(Film_id,Tickets_count,Seats_data),
           complete_booking({Film_id,Name,Email,Tickets_count,Total_price,Booking_data,Film_time});
         false->
-          <<"Booking is closed">>
+          <<"Booking is closed or invalid ticket count">>
       end
   end.
 

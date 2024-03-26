@@ -13,7 +13,7 @@ init(#{method := <<"POST">>} = Req, State) ->
              {ok, Body, _} = cowboy_req:read_body(Req),
              #{<<"uid">> := Uid}= cowboy_req:headers(Req),
              Data=jiffy:decode(Body,[return_maps]),
-             handle_add_film(Data,Uid);
+             catch handle_add_film(Data,Uid);
            false ->
              <<"Invalid Header">>
          end,
@@ -44,29 +44,26 @@ init(#{method := <<"PUT">>} = Req, State) ->
 
 %helper functions 
 % helper function to add film
-handle_add_film(Data,Uid)->
+handle_add_film(#{<<"film_name">> := Name,<<"time">> :=Time,
+<<"date">> := Date,<<"seats_data">>:= Seats_data,<<"theater">> := Theater_name},Uid)->
   case validate:is_admin(binary_to_integer(Uid)) of
     not_a_user ->
       <<"Invalid id">>;
     true ->
-      Name = maps:get(<<"film_name">>,Data),
-      Time= maps:get(<<"time">>,Data),
-      Date= maps:get(<<"date">>,Data),
-      Seats_data= maps:get(<<"seats_data">>,Data),
-      Theater_name= maps:get(<<"theater">>,Data),
       add_details:films({Name,Time,Date,Theater_name},Seats_data);
     false ->
       <<"not a admin">>
-  end.
+  end;
 
-handle_update_film(Data,Uid)->
+handle_add_film(_,_) ->
+  <<"invalid inputs">>.
+
+handle_update_film(#{<<"film_id">> := Film_id,<<"field">> :=Field,
+<<"value">>:= Value}=Data,Uid)->
   case validate:is_admin(binary_to_integer(Uid)) of
     not_a_user ->
       <<"Invalid id">>;
     true ->
-      Film_id = maps:get(<<"film_id">>,Data),
-      Field= maps:get(<<"field">>,Data),
-      Value= maps:get(<<"value">>,Data),
       case maps:is_key(<<"category">>,Data) of 
         true ->
           Category= maps:get(<<"category">>,Data),
@@ -76,5 +73,8 @@ handle_update_film(Data,Uid)->
       end;
     false ->
       <<"not a admin">>
-  end.
+  end;
+
+  handle_update_film(_,_)->
+    <<"invalid inputs">>.
 

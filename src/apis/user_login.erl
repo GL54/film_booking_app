@@ -21,8 +21,9 @@ init(#{method := <<"POST">>} = Req, State) ->
   {ok, Req2, State}.
 
 %helper functions 
-login(Data)->
-  Email= maps:get(<<"email">>,Data),
-  Password= maps:get(<<"password">>,Data),
 
-  film_gen_server:login({Email, Password}).
+login(#{<<"email">> := Email,<<"password">>:=Password})->
+  film_gen_server:login({Email, Password});
+
+login(_)->
+  <<"invalid inputs">>.

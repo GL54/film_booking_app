@@ -25,15 +25,16 @@ init(#{method := <<"POST">>} = Req, State) ->
   {ok, Req2, State}.
 
 %helper functions 
-book_film(Data,Uid)->
+book_film(#{<<"film_id">>:=Film_id,<<"seats">>:=Seats_count},Uid)->
   case validate:is_client(binary_to_integer(Uid)) of 
     not_a_user->
       <<"Not a registered user">>;
     _ ->
-      Film_id = maps:get(<<"film_id">>,Data),
-      Seats_count = maps:get(<<"seats">>,Data),
       [User]=mnesia:dirty_read(users,binary_to_integer(Uid)),
       Name=User#users.name,
       Email = User#users.email,
       client_booking:book_film(Film_id,{Name,Email,Seats_count})
-  end.
+  end;
+
+book_film(_,_)->
+  <<"Invalid inputs">>.

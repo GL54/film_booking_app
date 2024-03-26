@@ -32,7 +32,7 @@ init(#{method := <<"POST">>} = Req, State) ->
       {ok, Req2, State}
   end.
 
-handle_booking_data(Req,State,Data,Uid)->
+handle_booking_data(Req,State,#{<<"date">>:=Date},Uid)->
   Header=#{<<"content-type">> => <<"text/csv">>,
            <<"content-disposition">> =><<"attachment;filename=\"bookings.csv\"">>},
   case validate:is_admin(binary_to_integer(Uid)) of
@@ -41,14 +41,20 @@ handle_booking_data(Req,State,Data,Uid)->
       cowboy_req:reply(401,Header, <<"Invalid id">>, Req),
       {ok, Response1, State};
     true ->
-      Date= maps:get(<<"date">>,Data),
       Booking_status=get_details:booking_info(Date),
       send_file(Req,State,Uid,Booking_status);
     false ->
-      Response1 = cowboy_req:reply(401, #{<<"content-type">> => <<"text/csv">>}, 
+      Response1 = cowboy_req:reply(401, Header, 
                                    <<"not a admin">>, Req),
       {ok, Response1, State}
-  end.
+  end;
+
+handle_booking_data(Req,State,_,_)->
+  Header=#{<<"content-type">> => <<"text/csv">>,
+           <<"content-disposition">> =><<"attachment;filename=\"bookings.csv\"">>},
+   Response1 = cowboy_req:reply(401, Header, 
+                                   <<"invalid inputs">>, Req),
+      {ok, Response1, State}.
 
 send_file(Req,State,Uid,Data)->
   Headers=#{<<"content-type">> => <<"text/csv">>,

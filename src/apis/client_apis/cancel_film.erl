@@ -25,13 +25,12 @@ init(#{method := <<"POST">>} = Req, State) ->
   {ok, Req2, State}.
 
 %helper functions 
-cancel_film(Data,Uid)->
+cancel_film(#{<<"seats_count">>:=Seats,
+<<"booking_id">>:=Booking_id},Uid)->
   case validate:is_client(binary_to_integer(Uid)) of 
     not_a_user->
       <<"Not a registered user">>;
     _ ->
-      Seats = maps:get(<<"seats_count">>,Data),
-      Booking_id = maps:get(<<"booking_id">>,Data),
       if
         is_integer(Seats) ->
           cancel_booking:cancel_tickets({Booking_id,Seats});
@@ -41,8 +40,11 @@ cancel_film(Data,Uid)->
         true ->
           <<"Invalid input">>
       end
-  end.
+  end;
 
+  cancel_film(_,_)->
+    <<"invalid Inputs">>.
+  
 handle_all_case(Booking_id,Booking_data) ->
   case Booking_data of
     [] ->

@@ -21,10 +21,10 @@ init(#{method := <<"POST">>} = Req, State) ->
   {ok, Req2, State}.
 
 %helper functions 
-signup(Data)->
-  Name = maps:get(<<"name">>,Data),
-  Email= maps:get(<<"email">>,Data),
-  Password= maps:get(<<"password">>,Data),
-  Address= maps:get(<<"address">>,Data),
-  Phone= maps:get(<<"phone">>,Data),
-  film_gen_server:client_signup({Name,Email,Password,Address,Phone}).
+signup(#{<<"name">> := Name,<<"email">>:=Email,
+  <<"password">>:=Password,<<"address">>:=Address,
+  <<"phone">>:=Phone})->
+  film_gen_server:client_signup({Name,Email,Password,Address,Phone});
+
+signup(_)->
+  <<"invaid inputs">>.

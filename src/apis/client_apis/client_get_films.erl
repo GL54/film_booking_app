@@ -45,15 +45,17 @@ init(#{method := <<"POST">>} = Req, State) ->
 
 
 %helper functions 
-get_films(Data,Uid)->
+get_films(#{<<"date">>:=Date},Uid)->
   case validate:is_client(binary_to_integer(Uid)) of 
     not_a_user->
       <<"Not a registered user">>;
     _ ->
-      Date = maps:get(<<"date">>,Data),
       Response = get_films:by_date(Date),
       list_to_map(Response)
-  end.
+  end;
+
+get_films(_,_)->
+  <<"invalid inputs">>.
 
 % Function to transform each tuple into a map
 tuple_to_map({films,Id,Name,Time,_,Seats_data,Seats_count,Theater_name,Date}) ->
